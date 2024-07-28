@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Admin\HomeController as AdminHomeController;
 use App\Http\Controllers\HomeController as GuestHomeController;
+use App\Http\Controllers\Admin\ProjectController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,12 +25,6 @@ Auth::routes();
 
 Route::get('/home', [GuestHomeController::class, 'index'])->name('home');
 
-Route::middleware('auth')->name('admin.')->prefix('admin/')->group(function(){
-        // rotte protette
-    }
-);
-
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::middleware(['auth:sanctum', 'verified'])->name('admin.')->prefix('admin')->group(function(){
+    Route::resource('projects', ProjectController::class);
+});
